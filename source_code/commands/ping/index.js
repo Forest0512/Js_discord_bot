@@ -5,3 +5,4 @@ export const command = new SlashCommandBuilder().setName('ping').setDescrioption
 export const action = async(ctx) => { //ctx:context(上下文)
     ctx.reply('pong!')
 }
+//export 調用方法之一
