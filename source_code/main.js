@@ -1,4 +1,4 @@
-// import 
+// import(類python寫法)
 import {Client,Events,GatewayIntentBits} from 'discord.js'
 import dotenv from 'dotenv' //存取環境變數工具
 
