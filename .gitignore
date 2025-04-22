@@ -1,0 +1,4 @@
+//不需要的檔案名稱(可以被忽略傳遞上github)
+node_modules
+yarn.lock
+.env
