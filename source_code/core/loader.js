@@ -1,5 +1,6 @@
-import { REST,Routes } from 'discord.js'
+import { REST,Routes,Collection } from 'discord.js'
 import fg from 'fast-glob'
+import { useAppStore } from '@/store/app'
 
 const updateSlashCommands = async(commands) => {
     const rest = new REST( {version:10} ).setToken(process.env.token)
@@ -13,23 +14,50 @@ const updateSlashCommands = async(commands) => {
             body:commands,
         },
     )
-    console.log( result )
+    //console.log( result )
 }
 
 
 
 export const loadCommands = async() => {
+    const appStore = useAppStore()
     const commands = []
+    const actions = new Collection()
     const files = await fg('./source_code/commands/**/index.js') //  * 代表任何
     for ( const file of files ){
         const cmd = await import(file)
         commands.push(cmd.command)
+        actions.set(cmd.command.name, cmd.action)
         //console.log(cmd.command)
     }
     // load commands
     await updateSlashCommands(commands)//註冊指令
+    appStore.commandActionMap = actions
+
+    console.log(appStore.commandActionMap)
 }
 
+export const loadEvents = async() => {
+    const appstore = useAppStore()
+    const client = appstore.client //調用store裡面的client出來用
+    const files = await fg('./source_code/events/**/index.js') //讀取指令事件
+    for (const file of files){ //取出，依次產生事件
+        const eventFile = await import(file)
+
+        if (eventFile.event.once){
+            client.once(
+                eventFile.event.name,
+                eventFile.action,
+            )
+        }
+        else{
+            client.on(
+                eventFile.event.name,
+                eventFile.action,
+            )
+        }
+    }
+}
 
 
 /*手動請求方法之一
