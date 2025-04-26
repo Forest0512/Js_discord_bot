@@ -8,3 +8,4 @@ export default () => {
 
     vue.use(pinia)
 }
+//vue 架構建立

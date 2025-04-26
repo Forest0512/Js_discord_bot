@@ -3,6 +3,9 @@ import {Client,Events,GatewayIntentBits} from 'discord.js'
 import dotenv from 'dotenv' //存取環境變數工具
 import vuelnit from '@/core/vue'
 
+import { loadCommands } from '@/core/loader'
+
+loadCommands()
 
 vuelnit()
 dotenv.config()//調用環境變數工具
